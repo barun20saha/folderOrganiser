@@ -1,10 +1,18 @@
 import json
+import sys
 import uuid
 from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 
-HISTORY_FILE = Path(__file__).parent / "organizer_history.json"
+def get_app_dir() -> Path:
+    """Return the application directory, respecting PyInstaller bundle location."""
+    if getattr(sys, "frozen", False):
+        return Path(sys.executable).parent.resolve()
+    return Path(__file__).parent.resolve()
+
+
+HISTORY_FILE = get_app_dir() / "organizer_history.json"
 
 
 def load_history() -> List[Dict[str, Any]]:

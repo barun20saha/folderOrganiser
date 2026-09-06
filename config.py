@@ -12,7 +12,15 @@ PRESETS: Dict[str, Path] = {
     "Desktop": Path.home() / "Desktop",
 }
 
-SETTINGS_FILE = Path(__file__).parent / "settings.json"
+def get_app_dir() -> Path:
+    """Return the application directory, respecting PyInstaller bundle location."""
+    import sys
+    if getattr(sys, "frozen", False):
+        return Path(sys.executable).parent.resolve()
+    return Path(__file__).parent.resolve()
+
+
+SETTINGS_FILE = get_app_dir() / "settings.json"
 
 
 def load_settings() -> Dict[str, str]:
